@@ -1,2 +1,17 @@
 GET http://localhost:4000
 ###
+POST http://localhost:4000
+Content-Type: application/json
+
+{
+    "user_id": "50",
+    "description": "Post from node"
+}
+###
+POST http://localhost:4000/register
+Content-Type: application/json
+
+{
+    "email": "a@a.com",
+    "password": "123"
+}
