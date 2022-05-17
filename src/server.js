@@ -13,6 +13,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/', taskRoutes);
-app.use('/register', authRoutes);
+app.use('/', authRoutes);
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

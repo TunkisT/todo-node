@@ -14,19 +14,20 @@ async function addUserToDb(email, password) {
   }
 }
 
-async function addUserToDb(email, password) {
+async function getUserFromDb(email) {
   try {
     const connection = await mysql.createConnection(dbConfig);
-    const sql = `INSERT INTO users (email, password) VALUES (?, ?)`;
-    const [result] = await connection.execute(sql, [email, password]);
+    const sql = `SELECT * FROM users WHERE email = ?`;
+    const [result] = await connection.execute(sql, [email]);
     await connection.close();
     return result;
   } catch (error) {
-    console.log('addUserToDb error', error);
+    console.log('getUserFromDb error', error);
     return false;
   }
 }
 
 module.exports = {
   addUserToDb,
+  getUserFromDb,
 };
