@@ -1,18 +1,16 @@
 const bcrypt = require('bcryptjs');
 const { addUserToDb, getUserFromDb } = require('../models/authModel');
 const { failResponse, successResponse } = require('../utils/dbHelpers');
-const { verifyHash } = require('../utils/helpers');
+const { verifyHash, generateJwtToken } = require('../utils/helpers');
 
 async function registerController(req, res) {
   const passHash = bcrypt.hashSync(req.body.password, 10);
   const registerData = await addUserToDb(req.body.email, passHash);
   if (!registerData.insertId) {
-    return res.status(500).send({ err: 'Server issue - please try again' });
+    failResponse(res);
+    return;
   }
-  return res.send({
-    msg: 'Registration successful',
-    userId: registerData.insertId,
-  });
+  successResponse(res, 'New user created!');
 }
 
 async function loginController(req, res) {
@@ -29,7 +27,10 @@ async function loginController(req, res) {
     const error = [{ message: 'incorrect email or password' }];
     return failResponse(res, error);
   }
-  return successResponse(res, 'veikia login');
+  console.log('foundUserObj ===', foundUserObj);
+
+  const token = generateJwtToken(foundUserObj);
+  return successResponse(res, token);
 }
 
 module.exports = {
